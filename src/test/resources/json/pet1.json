@@ -1,0 +1,18 @@
+{
+  "id": 1372533,
+  "category": {
+    "id": 2,
+    "name": "cat"
+  },
+  "name": "leo",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "vacinado"
+    }
+  ],
+  "status": "available"
+}
