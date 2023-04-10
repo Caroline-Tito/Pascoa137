@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.is;
         // carregar os dados do json
         String jsonBody = lerArquivoJsonPet("src/test/resources/json/pet1.json");
 
+
         // realizar o teste
         given()
                 .contentType(ct2)
@@ -47,7 +48,7 @@ import static org.hamcrest.Matchers.is;
                 .log().all()
                 .statusCode(200)
                 .body("category.name", is("cat"))
-                .body("tags.name", is("vacinado"))
+                .body("tags[0].name", is("vacinado"))
                 .body("name", is("leo"))
                 .body("status", is("available"))
                 ;
@@ -55,7 +56,7 @@ import static org.hamcrest.Matchers.is;
     } // fim do post
 
     @Test
-    public void testarConsultarPet(){
+    public void testarConsultarPet() {
         Integer petId = 1372533;
 
         // resultado esperado
@@ -69,19 +70,51 @@ import static org.hamcrest.Matchers.is;
         given()
                 .contentType(ct2)
                 .log().all()
-        .when()
+                .when()
                 .get(uriPet + petId)
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("category.name", is(tipo))
-                .body("tags.name", is(tags))
+                .body("tags[0].name", is(tags))
                 .body("name", is(name))
                 .body("status", is(status))
 
         ;
+    }
+    @Test
+    public void testarAlterarPet() throws IOException {
+        String jsonBody = lerArquivoJsonPet("src/test/resources/json/pet2.json");
+        given()
+                .contentType(ct2)
+                .log().all()
+                .body(jsonBody)
+                .when()
+                .put(uriPet)
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("category.name", is("cat"))
+                .body("tags[0].name", is("tosado"))
+                .body("name", is("leo"))
+                .body("status", is("available"))
+        ;
+    }
+    @Test
+    public void testarExcluirPet(){
+        Integer petId = 1372533;
+            given()
+                    .contentType(ct2)
+                    .log().all()
+            .when()
+                    .delete(uriPet + petId)
+            .then()
+                    .statusCode(200)
+                    .body("code", is(200))
+                    .body("type", is("unknown"))
+                    .body("message", is("1372533"))
 
-
+            ;
 
 
     }
@@ -89,6 +122,4 @@ import static org.hamcrest.Matchers.is;
 
 
 
-
-
-} // fim da classe
+}
